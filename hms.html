@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare · Hospital Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-dark: #0a58ca;
+            --primary-light: #e6f0ff;
+            --secondary: #00b894;
+            --secondary-light: #e0f7f1;
+            --accent: #f8b739;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #e9ecef;
+            --dark: #1e2a3a;
+            --text: #2d3748;
+            --text-light: #6c7a89;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --transition: 0.25s ease;
+            --font: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--light-gray);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--gray);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: var(--text-light);
+        }
+        .mb-1 {
+            margin-bottom: 1rem;
+        }
+        .mb-2 {
+            margin-bottom: 2rem;
+        }
+        .mt-2 {
+            margin-top: 2rem;
+        }
+        .gap-1 {
+            gap: 0.8rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            background: var(--gray);
+            color: var(--text);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(13, 110, 253, 0.25);
+        }
+        .btn-success {
+            background: var(--secondary);
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #00a381;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-danger {
+            background: #e53e3e;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        .btn-sm {
+            padding: 0.35rem 1rem;
+            font-size: 0.85rem;
+        }
+        .btn-warning {
+            background: #f0ad4e;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #ec971f;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+        .card:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .logo i {
+            font-size: 1.8rem;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .nav-links .btn {
+            padding: 0.4rem 1.2rem;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #e6f0ff 0%, #ffffff 100%);
+            padding: 4rem 0 3rem;
+            border-radius: 0 0 40px 40px;
+        }
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+        .hero h1 span {
+            color: var(--primary);
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin: 1rem 0 1.8rem;
+        }
+        .hero-badge {
+            background: var(--secondary-light);
+            color: var(--secondary);
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .hero-image {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 8rem;
+            color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .section-sub {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .service-icon {
+            font-size: 2.2rem;
+            color: var(--primary);
+            background: var(--primary-light);
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .doctor-card {
+            text-align: center;
+        }
+        .doctor-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--gray);
+            margin-bottom: 0.8rem;
+        }
+        .doctor-card .specialty {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .sidebar {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem 1rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .sidebar .menu-item:hover,
+        .sidebar .menu-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .sidebar .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        th {
+            background: var(--light-gray);
+            color: var(--text-light);
+            font-weight: 600;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--gray);
+        }
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--gray);
+        }
+        .badge {
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: var(--secondary-light);
+            color: var(--secondary);
+        }
+        .badge-warning {
+            background: #fff3cd;
+            color: #b8860b;
+        }
+        .badge-danger {
+            background: #fdd;
+            color: #c0392b;
+        }
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .badge-primary {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .footer {
+            background: var(--dark);
+            color: #cbd5e0;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+            border-radius: 40px 40px 0 0;
+        }
+        .footer a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .footer h5 {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .footer .social i {
+            font-size: 1.3rem;
+            margin-right: 0.8rem;
+            color: #cbd5e0;
+            transition: var(--transition);
+        }
+        .footer .social i:hover {
+            color: #fff;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .emergency-bar {
+            background: #e53e3e;
+            color: #fff;
+            padding: 0.6rem 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .emergency-bar i {
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 1rem 0;
+                gap: 0.8rem;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .stat-card .label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .dashboard-section {
+            display: none;
+        }
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        .modal .close-modal:hover {
+            color: var(--text);
+        }
+        .admin-badge {
+            background: #f0ad4e;
+            color: #fff;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .status-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            position: relative;
+        }
+        .status-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--gray);
+            z-index: 0;
+        }
+        .status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            background: var(--white);
+            padding: 0 0.5rem;
+        }
+        .status-step .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            border: 2px solid var(--gray);
+            background: var(--white);
+        }
+        .status-step.active .step-icon {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+        .status-step.completed .step-icon {
+            border-color: var(--secondary);
+            background: var(--secondary);
+            color: #fff;
+        }
+        .status-step .step-label {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="emergency-bar">
+        <i class="fas fa-phone-alt"></i> Emergency: +1-800-123-4567 &nbsp;|&nbsp; <i class="fas fa-ambulance"></i> 24/7 Ambulance Service
+    </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo" onclick="showPage('home')"><i class="fas fa-heartbeat"></i> MediCare</a>
+            <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a onclick="showPage('home')">Home</a></li>
+                <li><a onclick="showPage('departments')">Departments</a></li>
+                <li><a onclick="showPage('doctors')">Doctors</a></li>
+                <li><a onclick="showPage('appointment')">Book Appointment</a></li>
+                <li><a onclick="showPage('dashboard')">Dashboard</a></li>
+                <li id="authNavLink">
+                    <a class="btn btn-primary btn-sm" onclick="showPage('login')"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="mainContent"></main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="grid-3">
+                <div>
+                    <h5><i class="fas fa-heartbeat" style="color:var(--primary);"></i> MediCare</h5>
+                    <p style="margin-top:0.5rem;">Providing compassionate, high-quality healthcare for over 20 years.</p>
+                    <div class="social" style="margin-top:1rem;">
+                        <i class="fab fa-facebook"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-linkedin"></i>
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                </div>
+                <div>
+                    <h5>Quick Links</h5>
+                    <p><a onclick="showPage('home')">Home</a></p>
+                    <p><a onclick="showPage('departments')">Departments</a></p>
+                    <p><a onclick="showPage('doctors')">Doctors</a></p>
+                    <p><a onclick="showPage('appointment')">Appointments</a></p>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Health St, Medical City</p>
+                    <p><i class="fas fa-phone"></i> +1-800-123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@medicare.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 MediCare Hospital Management System. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        //  HOSPITAL MANAGEMENT SYSTEM — COMPLETE APPOINTMENT WORKFLOW
+        //  Booking → Admin Confirm → Doctor Treatment → Payment
+        // ============================================================
+
+        // ----- DATABASE (localStorage) -----
+        const DB = {
+            getUsers() {
+                return JSON.parse(localStorage.getItem('hms_users')) || [];
+            },
+            setUsers(users) {
+                localStorage.setItem('hms_users', JSON.stringify(users));
+            },
+            getDoctors() {
+                return JSON.parse(localStorage.getItem('hms_doctors')) || [];
+            },
+            setDoctors(doctors) {
+                localStorage.setItem('hms_doctors', JSON.stringify(doctors));
+            },
+            getAppointments() {
+                return JSON.parse(localStorage.getItem('hms_appointments')) || [];
+            },
+            setAppointments(apps) {
+                localStorage.setItem('hms_appointments', JSON.stringify(apps));
+            },
+            getBills() {
+                return JSON.parse(localStorage.getItem('hms_bills')) || [];
+            },
+            setBills(bills) {
+                localStorage.setItem('hms_bills', JSON.stringify(bills));
+            },
+            getLabReports() {
+                return JSON.parse(localStorage.getItem('hms_labreports')) || [];
+            },
+            setLabReports(reports) {
+                localStorage.setItem('hms_labreports', JSON.stringify(reports));
+            },
+            getPharmacy() {
+                return JSON.parse(localStorage.getItem('hms_pharmacy')) || [];
+            },
+            setPharmacy(pharmacy) {
+                localStorage.setItem('hms_pharmacy', JSON.stringify(pharmacy));
+            },
+            getCurrentUser() {
+                return JSON.parse(sessionStorage.getItem('hms_current_user')) || null;
+            },
+            setCurrentUser(user) {
+                sessionStorage.setItem('hms_current_user', JSON.stringify(user));
+            },
+            clearSession() {
+                sessionStorage.removeItem('hms_current_user');
+            }
+        };
+
+        // ----- INIT SEED DATA -----
+        function seedData() {
+            if (DB.getUsers().length === 0) {
+                DB.setUsers([
+                    { id: 1, username: 'admin', password: 'admin123', role: 'admin', name: 'Admin User' },
+                    { id: 2, username: 'dr.sarah', password: 'doctor123', role: 'doctor', name: 'Dr. Sarah Johnson',
+                        specialty: 'Cardiology' },
+                    { id: 3, username: 'alice', password: 'patient123', role: 'patient', name: 'Alice Brown',
+                        dob: '1985-04-12', bloodGroup: 'A+', contact: 'alice@email.com' },
+                ]);
+            }
+            if (DB.getDoctors().length === 0) {
+                DB.setDoctors([
+                    { id: 1, name: 'Dr. Sarah Johnson', specialty: 'Cardiology', experience: '12 years',
+                        userId: 2, fee: 150 },
+                    { id: 2, name: 'Dr. Michael Chen', specialty: 'Neurology', experience: '10 years', fee: 200 },
+                    { id: 3, name: 'Dr. Emily Davis', specialty: 'Pediatrics', experience: '8 years', fee: 120 },
+                ]);
+            }
+            if (DB.getAppointments().length === 0) {
+                DB.setAppointments([
+                    { id: 1, patientId: 3, patientName: 'Alice Brown', doctorId: 1, doctorName: 'Dr. Sarah Johnson',
+                        date: '2026-06-25', time: '10:00 AM', status: 'confirmed', fee: 150, paymentStatus: 'unpaid' },
+                ]);
+            }
+            if (DB.getBills().length === 0) {
+                DB.setBills([
+                    { id: 1, appointmentId: 1, patientId: 3, patientName: 'Alice Brown', amount: 150, status: 'unpaid',
+                        date: '2026-06-25' },
+                ]);
+            }
+            if (DB.getLabReports().length === 0) {
+                DB.setLabReports([
+                    { id: 1, patientId: 3, patientName: 'Alice Brown', test: 'Blood Test', date: '2026-06-20',
+                        status: 'Ready', result: 'Normal' },
+                ]);
+            }
+            if (DB.getPharmacy().length === 0) {
+                DB.setPharmacy([
+                    { id: 1, name: 'Paracetamol', stock: 120, price: 5.50 },
+                    { id: 2, name: 'Amoxicillin', stock: 45, price: 12.00 },
+                    { id: 3, name: 'Ibuprofen', stock: 80, price: 8.25 },
+                ]);
+            }
+        }
+
+        // ----- STATE -----
+        let currentUser = DB.getCurrentUser();
+        let currentPage = 'home';
+        let dashboardSection = 'overview';
+
+        // ----- DOM REFS -----
+        const main = document.getElementById('mainContent');
+        const navLinks = document.getElementById('navLinks');
+        const menuToggle = document.getElementById('menuToggle');
+        const authNavLink = document.getElementById('authNavLink');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        // ----- NAVIGATION -----
+        function showPage(page) {
+            currentPage = page;
+            renderPage();
+            navLinks.classList.remove('open');
+        }
+
+        function renderPage() {
+            const user = DB.getCurrentUser();
+
+            if (user) {
+                const roleBadge = user.role === 'admin' ? '<span class="admin-badge">Admin</span>' : '';
+                authNavLink.innerHTML =
+                    `<span style="color:var(--text);font-weight:500;"><i class="fas fa-user-circle"></i> ${user.name} ${roleBadge}</span>
+                               <a class="btn btn-danger btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>`;
+            } else {
+                authNavLink.innerHTML =
+                    `<a class="btn btn-primary btn-sm" onclick="showPage('login')"><i class="fas fa-sign-in-alt"></i> Login</a>`;
+            }
+
+            switch (currentPage) {
+                case 'home':
+                    renderHome();
+                    break;
+                case 'departments':
+                    renderDepartments();
+                    break;
+                case 'doctors':
+                    renderDoctors();
+                    break;
+                case 'appointment':
+                    renderAppointment();
+                    break;
+                case 'dashboard':
+                    renderDashboard();
+                    break;
+                case 'login':
+                    renderLogin();
+                    break;
+                case 'register':
+                    renderRegister();
+                    break;
+                default:
+                    renderHome();
+            }
+        }
+
+        // ----- AUTH FUNCTIONS -----
+        function logout() {
+            DB.clearSession();
+            currentUser = null;
+            showPage('home');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const role = document.getElementById('loginRole').value;
+
+            if (!username || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const users = DB.getUsers();
+            const user = users.find(u => u.username === username && u.password === password && u.role === role);
+            if (!user) {
+                alert('Invalid credentials or role mismatch!');
+                return;
+            }
+
+            DB.setCurrentUser(user);
+            currentUser = user;
+            alert(`Welcome ${user.name}!`);
+            showPage('dashboard');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const role = document.getElementById('regRole').value;
+            const specialty = document.getElementById('regSpecialty')?.value?.trim() || '';
+            const dob = document.getElementById('regDob')?.value || '';
+            const bloodGroup = document.getElementById('regBloodGroup')?.value || '';
+            const contact = document.getElementById('regContact')?.value || '';
+            const adminKey = document.getElementById('regAdminKey')?.value?.trim() || '';
+
+            if (!name || !username || !password) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            if (role === 'admin' && adminKey !== 'ADMIN2026') {
+                alert('Invalid admin registration key. Please contact system administrator.');
+                return;
+            }
+
+            const users = DB.getUsers();
+            if (users.find(u => u.username === username)) {
+                alert('Username already exists!');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                username,
+                password,
+                role,
+                name,
+                ...(role === 'doctor' && { specialty }),
+                ...(role === 'patient' && { dob, bloodGroup, contact }),
+                ...(role === 'admin' && { registeredAt: new Date().toISOString() })
+            };
+            users.push(newUser);
+            DB.setUsers(users);
+
+            if (role === 'doctor') {
+                const doctors = DB.getDoctors();
+                doctors.push({
+                    id: newUser.id,
+                    name: name,
+                    specialty: specialty,
+                    experience: 'New',
+                    userId: newUser.id,
+                    fee: 100
+                });
+                DB.setDoctors(doctors);
+            }
+
+            alert('Registration successful! Please login.');
+            showPage('login');
+        }
+
+        // ----- RENDER: HOME (unchanged) -----
+        function renderHome() {
+            const doctors = DB.getDoctors();
+            main.innerHTML = `
+                <section class="hero">
+                    <div class="container">
+                        <div>
+                            <div class="hero-badge"><i class="fas fa-star"></i> Top-Rated Hospital</div>
+                            <h1>Your Health, <span>Our Priority</span></h1>
+                            <p>MediCare provides world-class medical services with compassionate care.</p>
+                            <div class="flex" style="justify-content:flex-start;">
+                                <a class="btn btn-primary" onclick="showPage('appointment')"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+                                <a class="btn btn-outline" onclick="showPage('dashboard')"><i class="fas fa-user-md"></i> Dashboard</a>
+                            </div>
+                        </div>
+                        <div class="hero-image">
+                            <i class="fas fa-hospital-user"></i>
+                            <p style="font-size:1rem;color:var(--text-light);margin-top:0.5rem;">Caring for you, always.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="container" style="margin-top:-1.5rem;position:relative;z-index:2;">
+                    <div class="grid-4">
+                        <div class="card stat-card"><div class="number">${doctors.length}+</div><div class="label">Expert Doctors</div></div>
+                        <div class="card stat-card"><div class="number">8</div><div class="label">Departments</div></div>
+                        <div class="card stat-card"><div class="number">${DB.getUsers().filter(u=>u.role==='patient').length}</div><div class="label">Patients</div></div>
+                        <div class="card stat-card"><div class="number">24/7</div><div class="label">Emergency Service</div></div>
+                    </div>
+                </div>
+
+                <div class="container mt-2">
+                    <h2 class="section-title">Our Services</h2>
+                    <div class="grid-3">
+                        ${['Cardiology','Neurology','Orthopedics','Pediatrics','General Medicine','Emergency Care'].map(d => `
+                            <div class="card">
+                                <div class="service-icon"><i class="fas fa-${d==='Cardiology'?'heart':d==='Neurology'?'brain':d==='Orthopedics'?'bone':d==='Pediatrics'?'baby':d==='General Medicine'?'stethoscope':'ambulance'}"></i></div>
+                                <h4>${d}</h4>
+                                <p class="text-muted">Specialized ${d.toLowerCase()} care</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="container mt-2">
+                    <h2 class="section-title">Meet Our Experts</h2>
+                    <div class="grid-3">
+                        ${doctors.slice(0,3).map(d => `
+                            <div class="card doctor-card">
+                                <div style="font-size:3rem;">👨‍⚕️</div>
+                                <h4>${d.name}</h4>
+                                <p class="specialty">${d.specialty}</p>
+                                <a class="btn btn-primary btn-sm" onclick="showPage('appointment')">Book</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- RENDER: DEPARTMENTS (unchanged) -----
+        function renderDepartments() {
+            main.innerHTML = `
+                <div class="container mt-2">
+                    <h2 class="section-title">Departments & Services</h2>
+                    <div class="grid-3">
+                        ${['Cardiology','Neurology','Orthopedics','Pediatrics','General Medicine','Emergency Care','ICU / Critical Care','Diagnostic Services'].map(d => `
+                            <div class="card">
+                                <div class="service-icon"><i class="fas fa-${d==='Cardiology'?'heart':d==='Neurology'?'brain':d==='Orthopedics'?'bone':d==='Pediatrics'?'baby':d==='General Medicine'?'stethoscope':d==='Emergency Care'?'ambulance':d==='ICU / Critical Care'?'hospital':'microscope'}"></i></div>
+                                <h4>${d}</h4>
+                                <p class="text-muted">Comprehensive ${d.toLowerCase()} services</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- RENDER: DOCTORS (unchanged) -----
+        function renderDoctors() {
+            const doctors = DB.getDoctors();
+            main.innerHTML = `
+                <div class="container mt-2">
+                    <h2 class="section-title">Our Doctors</h2>
+                    <div class="grid-3">
+                        ${doctors.map(d => `
+                            <div class="card doctor-card">
+                                <div style="font-size:3rem;">👨‍⚕️</div>
+                                <h4>${d.name}</h4>
+                                <p class="specialty">${d.specialty} · ${d.experience || 'Experienced'}</p>
+                                <a class="btn btn-primary btn-sm" onclick="showPage('appointment')">Book Appointment</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- RENDER: APPOINTMENT -----
+        function renderAppointment() {
+            const doctors = DB.getDoctors();
+            const user = DB.getCurrentUser();
+            const patientName = user && user.role === 'patient' ? user.name : '';
+
+            main.innerHTML = `
+                <div class="container mt-2">
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3><i class="fas fa-calendar-plus" style="color:var(--primary);"></i> Book Appointment</h3>
+                            <form onsubmit="bookAppointment(event)">
+                                <div class="form-group">
+                                    <label>Patient Name</label>
+                                    <input class="form-control" id="appPatientName" placeholder="Your name" value="${patientName}" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Doctor</label>
+                                    <select class="form-control" id="appDoctor">
+                                        ${doctors.map(d => `<option value="${d.id}" data-fee="${d.fee || 100}">${d.name} (${d.specialty}) - $${d.fee || 100}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input class="form-control" type="date" id="appDate" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Time</label>
+                                    <input class="form-control" type="time" id="appTime" required />
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fas fa-check"></i> Book Appointment</button>
+                            </form>
+                        </div>
+                        <div>
+                            <div class="card">
+                                <h4><i class="fas fa-clock" style="color:var(--primary);"></i> My Appointments</h4>
+                                <div class="table-wrap">
+                                    <table>
+                                        <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th></tr>
+                                        ${DB.getAppointments().filter(a => !user || a.patientName === user.name || user.role === 'admin' || user.role === 'doctor').map(a => `
+                                            <tr>
+                                                <td>${a.patientName}</td>
+                                                <td>${a.doctorName}</td>
+                                                <td>${a.date}</td>
+                                                <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                            </tr>
+                                        `).join('')}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function bookAppointment(e) {
+            e.preventDefault();
+            const patientName = document.getElementById('appPatientName').value.trim();
+            const doctorId = parseInt(document.getElementById('appDoctor').value);
+            const date = document.getElementById('appDate').value;
+            const time = document.getElementById('appTime').value;
+
+            if (!patientName || !date || !time) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const doctors = DB.getDoctors();
+            const doctor = doctors.find(d => d.id === doctorId);
+            const appointments = DB.getAppointments();
+            const fee = doctor ? doctor.fee || 100 : 100;
+
+            appointments.push({
+                id: Date.now(),
+                patientName,
+                doctorId: doctorId,
+                doctorName: doctor ? doctor.name : 'Unknown',
+                date,
+                time,
+                status: 'pending', // pending → confirmed → completed → paid
+                fee: fee,
+                paymentStatus: 'unpaid'
+            });
+            DB.setAppointments(appointments);
+
+            // Create bill
+            const bills = DB.getBills();
+            bills.push({
+                id: Date.now(),
+                appointmentId: appointments[appointments.length - 1].id,
+                patientName,
+                amount: fee,
+                status: 'unpaid',
+                date: date
+            });
+            DB.setBills(bills);
+
+            alert('✅ Appointment booked successfully! Waiting for admin confirmation.');
+            renderAppointment();
+        }
+
+        // ----- DASHBOARD RENDER -----
+        function renderDashboard() {
+            const user = DB.getCurrentUser();
+            if (!user) {
+                main.innerHTML = `
+                    <div class="container mt-2">
+                        <div class="card text-center" style="max-width:500px;margin:0 auto;">
+                            <h3><i class="fas fa-user-shield"></i> Please Login</h3>
+                            <p class="text-muted">You need to login to access your dashboard.</p>
+                            <button class="btn btn-primary" onclick="showPage('login')">Login</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            if (user.role === 'admin') renderAdminDashboard();
+            else if (user.role === 'doctor') renderDoctorDashboard(user);
+            else if (user.role === 'patient') renderPatientDashboard(user);
+        }
+
+        // ----- ADMIN DASHBOARD -----
+        function renderAdminDashboard() {
+            main.innerHTML = `
+                <div class="container">
+                    <div class="dashboard-layout">
+                        <aside class="sidebar">
+                            <div class="menu-item active" onclick="showDashboardSection('overview')"><i class="fas fa-tachometer-alt"></i> Overview</div>
+                            <div class="menu-item" onclick="showDashboardSection('appointments')"><i class="fas fa-calendar-check"></i> Appointments</div>
+                            <div class="menu-item" onclick="showDashboardSection('patients')"><i class="fas fa-users"></i> Patients</div>
+                            <div class="menu-item" onclick="showDashboardSection('doctors')"><i class="fas fa-user-md"></i> Doctors</div>
+                            <div class="menu-item" onclick="showDashboardSection('billing')"><i class="fas fa-file-invoice-dollar"></i> Billing</div>
+                            <div class="menu-item" onclick="showDashboardSection('pharmacy')"><i class="fas fa-pills"></i> Pharmacy</div>
+                            <div class="menu-item" onclick="showDashboardSection('lab')"><i class="fas fa-flask"></i> Lab Reports</div>
+                        </aside>
+                        <div id="dashboardContent">
+                            ${getAdminOverview()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminOverview() {
+            const appointments = DB.getAppointments();
+            const pending = appointments.filter(a => a.status === 'pending').length;
+            const confirmed = appointments.filter(a => a.status === 'confirmed').length;
+            const completed = appointments.filter(a => a.status === 'completed').length;
+            const paid = appointments.filter(a => a.status === 'paid').length;
+            const totalRevenue = DB.getBills().filter(b => b.status === 'paid').reduce((sum, b) => sum + b.amount, 0);
+
+            return `
+                <div>
+                    <div class="grid-4">
+                        <div class="stat-card"><div class="number">${pending}</div><div class="label">Pending</div></div>
+                        <div class="stat-card"><div class="number">${confirmed}</div><div class="label">Confirmed</div></div>
+                        <div class="stat-card"><div class="number">${completed}</div><div class="label">Completed</div></div>
+                        <div class="stat-card"><div class="number">$${totalRevenue}</div><div class="label">Revenue</div></div>
+                    </div>
+                    <div class="card mt-2">
+                        <h4>All Appointments</h4>
+                        <div class="table-wrap">
+                            <table>
+                                <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Payment</th><th>Action</th></tr>
+                                ${appointments.map(a => `
+                                    <tr>
+                                        <td>${a.patientName}</td>
+                                        <td>${a.doctorName}</td>
+                                        <td>${a.date}</td>
+                                        <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                        <td><span class="badge ${a.paymentStatus==='paid'?'badge-success':'badge-danger'}">${a.paymentStatus || 'unpaid'}</span></td>
+                                        <td>
+                                            ${a.status === 'pending' ? `<button class="btn btn-success btn-sm" onclick="confirmAppointment(${a.id})"><i class="fas fa-check"></i> Confirm</button>` : ''}
+                                            ${a.status === 'paid' ? `<span class="badge badge-success">Complete</span>` : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function confirmAppointment(appointmentId) {
+            if (!confirm('Confirm this appointment?')) return;
+            const appointments = DB.getAppointments();
+            const app = appointments.find(a => a.id === appointmentId);
+            if (app) {
+                app.status = 'confirmed';
+                DB.setAppointments(appointments);
+                alert('Appointment confirmed!');
+                renderAdminDashboard();
+                showDashboardSection('appointments');
+            }
+        }
+
+        // ----- DOCTOR DASHBOARD -----
+        function renderDoctorDashboard(user) {
+            main.innerHTML = `
+                <div class="container">
+                    <div class="dashboard-layout">
+                        <aside class="sidebar">
+                            <div class="menu-item active" onclick="showDashboardSection('overview')"><i class="fas fa-tachometer-alt"></i> Overview</div>
+                            <div class="menu-item" onclick="showDashboardSection('appointments')"><i class="fas fa-calendar-day"></i> Appointments</div>
+                            <div class="menu-item" onclick="showDashboardSection('patients')"><i class="fas fa-user-injured"></i> Patients</div>
+                        </aside>
+                        <div id="dashboardContent">
+                            ${getDoctorOverview(user)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getDoctorOverview(user) {
+            const appointments = DB.getAppointments().filter(a => a.doctorName.includes(user.name));
+            const confirmed = appointments.filter(a => a.status === 'confirmed').length;
+            const completed = appointments.filter(a => a.status === 'completed').length;
+
+            return `
+                <div>
+                    <div class="grid-3">
+                        <div class="stat-card"><div class="number">${appointments.length}</div><div class="label">Total</div></div>
+                        <div class="stat-card"><div class="number">${confirmed}</div><div class="label">Confirmed</div></div>
+                        <div class="stat-card"><div class="number">${completed}</div><div class="label">Completed</div></div>
+                    </div>
+                    <div class="card mt-2">
+                        <h4>My Appointments</h4>
+                        <div class="table-wrap">
+                            <table>
+                                <tr><th>Patient</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr>
+                                ${appointments.map(a => `
+                                    <tr>
+                                        <td>${a.patientName}</td>
+                                        <td>${a.date}</td>
+                                        <td>${a.time || 'N/A'}</td>
+                                        <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                        <td>
+                                            ${a.status === 'confirmed' ? `<button class="btn btn-primary btn-sm" onclick="completeTreatment(${a.id})"><i class="fas fa-check-double"></i> Complete</button>` : ''}
+                                            ${a.status === 'completed' ? `<span class="badge badge-info">Awaiting Payment</span>` : ''}
+                                            ${a.status === 'paid' ? `<span class="badge badge-success">Paid</span>` : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function completeTreatment(appointmentId) {
+            if (!confirm('Mark this treatment as completed?')) return;
+            const appointments = DB.getAppointments();
+            const app = appointments.find(a => a.id === appointmentId);
+            if (app) {
+                app.status = 'completed';
+                DB.setAppointments(appointments);
+                alert('Treatment completed! Patient can now pay.');
+                renderDoctorDashboard(DB.getCurrentUser());
+                showDashboardSection('appointments');
+            }
+        }
+
+        // ----- PATIENT DASHBOARD -----
+        function renderPatientDashboard(user) {
+            main.innerHTML = `
+                <div class="container">
+                    <div class="dashboard-layout">
+                        <aside class="sidebar">
+                            <div class="menu-item active" onclick="showDashboardSection('overview')"><i class="fas fa-tachometer-alt"></i> Overview</div>
+                            <div class="menu-item" onclick="showDashboardSection('profile')"><i class="fas fa-id-card"></i> Profile</div>
+                            <div class="menu-item" onclick="showDashboardSection('appointments')"><i class="fas fa-calendar-check"></i> Appointments</div>
+                            <div class="menu-item" onclick="showDashboardSection('billing')"><i class="fas fa-file-invoice-dollar"></i> Billing</div>
+                            <div class="menu-item" onclick="showDashboardSection('history')"><i class="fas fa-notes-medical"></i> History</div>
+                            <div class="menu-item" onclick="showDashboardSection('labreports')"><i class="fas fa-flask"></i> Lab Reports</div>
+                        </aside>
+                        <div id="dashboardContent">
+                            ${getPatientOverview(user)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPatientOverview(user) {
+            const appointments = DB.getAppointments().filter(a => a.patientName === user.name);
+            const bills = DB.getBills().filter(b => b.patientName === user.name);
+            const unpaidBills = bills.filter(b => b.status === 'unpaid');
+
+            return `
+                <div>
+                    <div class="grid-3">
+                        <div class="stat-card"><div class="number">${appointments.length}</div><div class="label">Appointments</div></div>
+                        <div class="stat-card"><div class="number">${bills.length}</div><div class="label">Bills</div></div>
+                        <div class="stat-card"><div class="number">${unpaidBills.length}</div><div class="label">Unpaid Bills</div></div>
+                    </div>
+                    <div class="card mt-2">
+                        <h4>My Appointments</h4>
+                        <div class="table-wrap">
+                            <table>
+                                <tr><th>Doctor</th><th>Date</th><th>Status</th><th>Payment</th><th>Action</th></tr>
+                                ${appointments.map(a => `
+                                    <tr>
+                                        <td>${a.doctorName}</td>
+                                        <td>${a.date}</td>
+                                        <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                        <td><span class="badge ${a.paymentStatus==='paid'?'badge-success':'badge-danger'}">${a.paymentStatus || 'unpaid'}</span></td>
+                                        <td>
+                                            ${a.status === 'completed' && a.paymentStatus !== 'paid' ? `<button class="btn btn-success btn-sm" onclick="payBill(${a.id})"><i class="fas fa-credit-card"></i> Pay $${a.fee}</button>` : ''}
+                                            ${a.status === 'paid' ? `<span class="badge badge-success">Paid</span>` : ''}
+                                            ${a.status === 'pending' ? `<span class="badge badge-warning">Waiting for confirmation</span>` : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function payBill(appointmentId) {
+            if (!confirm('Confirm payment for this appointment?')) return;
+
+            const appointments = DB.getAppointments();
+            const app = appointments.find(a => a.id === appointmentId);
+            if (!app) return;
+
+            app.status = 'paid';
+            app.paymentStatus = 'paid';
+            DB.setAppointments(appointments);
+
+            const bills = DB.getBills();
+            const bill = bills.find(b => b.appointmentId === appointmentId);
+            if (bill) {
+                bill.status = 'paid';
+                DB.setBills(bills);
+            }
+
+            alert('Payment successful! Thank you.');
+            renderPatientDashboard(DB.getCurrentUser());
+            showDashboardSection('overview');
+        }
+
+        // ----- SHOW DASHBOARD SECTION -----
+        function showDashboardSection(section) {
+            dashboardSection = section;
+            const user = DB.getCurrentUser();
+            if (!user) return;
+            const content = document.getElementById('dashboardContent');
+            if (!content) return;
+
+            if (user.role === 'admin') {
+                if (section === 'overview') content.innerHTML = getAdminOverview();
+                else if (section === 'appointments') content.innerHTML = getAdminAppointments();
+                else if (section === 'patients') content.innerHTML = getAdminPatients();
+                else if (section === 'doctors') content.innerHTML = getAdminDoctors();
+                else if (section === 'billing') content.innerHTML = getAdminBilling();
+                else if (section === 'pharmacy') content.innerHTML = getAdminPharmacy();
+                else if (section === 'lab') content.innerHTML = getAdminLab();
+            } else if (user.role === 'doctor') {
+                if (section === 'overview') content.innerHTML = getDoctorOverview(user);
+                else if (section === 'appointments') content.innerHTML = getDoctorAppointments(user);
+                else if (section === 'patients') content.innerHTML = getDoctorPatients(user);
+            } else if (user.role === 'patient') {
+                if (section === 'overview') content.innerHTML = getPatientOverview(user);
+                else if (section === 'profile') content.innerHTML = getPatientProfile(user);
+                else if (section === 'appointments') content.innerHTML = getPatientAppointments(user);
+                else if (section === 'billing') content.innerHTML = getPatientBilling(user);
+                else if (section === 'history') content.innerHTML = getPatientHistory(user);
+                else if (section === 'labreports') content.innerHTML = getPatientLabReports(user);
+            }
+
+            document.querySelectorAll('.sidebar .menu-item').forEach(el => el.classList.remove('active'));
+            const items = document.querySelectorAll('.sidebar .menu-item');
+            const sectionMap = {
+                'overview': 0,
+                'appointments': 1,
+                'patients': 2,
+                'doctors': 3,
+                'billing': 4,
+                'pharmacy': 5,
+                'lab': 6,
+                'profile': 1,
+                'history': 2,
+                'labreports': 3
+            };
+            const idx = sectionMap[section] || 0;
+            if (items[idx]) items[idx].classList.add('active');
+        }
+
+        // ----- ADMIN SECTION HELPERS (simplified) -----
+        function getAdminAppointments() {
+            const appointments = DB.getAppointments();
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-calendar-check"></i> All Appointments</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Payment</th><th>Action</th></tr>
+                            ${appointments.map(a => `
+                                <tr>
+                                    <td>${a.patientName}</td>
+                                    <td>${a.doctorName}</td>
+                                    <td>${a.date}</td>
+                                    <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                    <td><span class="badge ${a.paymentStatus==='paid'?'badge-success':'badge-danger'}">${a.paymentStatus || 'unpaid'}</span></td>
+                                    <td>
+                                        ${a.status === 'pending' ? `<button class="btn btn-success btn-sm" onclick="confirmAppointment(${a.id})"><i class="fas fa-check"></i> Confirm</button>` : ''}
+                                        ${a.status === 'paid' ? `<span class="badge badge-success">Complete</span>` : ''}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminPatients() {
+            const patients = DB.getUsers().filter(u => u.role === 'patient');
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-users"></i> All Patients</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <tr><th>Name</th><th>Username</th><th>Contact</th><th>Blood Group</th></tr>
+                            ${patients.map(p => `
+                                <tr><td>${p.name}</td><td>${p.username}</td><td>${p.contact || 'N/A'}</td><td>${p.bloodGroup || 'N/A'}</td></tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminDoctors() {
+            const doctors = DB.getDoctors();
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-user-md"></i> Manage Doctors</h4>
+                    <button class="btn btn-primary btn-sm" onclick="showAddDoctorModal()"><i class="fas fa-plus"></i> Add Doctor</button>
+                    <div class="table-wrap mt-2">
+                        <table>
+                            <tr><th>Name</th><th>Specialty</th><th>Fee</th><th>Action</th></tr>
+                            ${doctors.map(d => `
+                                <tr>
+                                    <td>${d.name}</td>
+                                    <td>${d.specialty}</td>
+                                    <td>$${d.fee || 100}</td>
+                                    <td><button class="btn btn-danger btn-sm" onclick="deleteDoctor(${d.id})"><i class="fas fa-trash"></i></button></td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminBilling() {
+            const bills = DB.getBills();
+            const totalRevenue = bills.filter(b => b.status === 'paid').reduce((sum, b) => sum + b.amount, 0);
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-file-invoice-dollar"></i> Billing Overview</h4>
+                    <div class="stat-card"><div class="number">$${totalRevenue}</div><div class="label">Total Revenue</div></div>
+                    <div class="table-wrap mt-2">
+                        <table>
+                            <tr><th>Patient</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+                            ${bills.map(b => `
+                                <tr>
+                                    <td>${b.patientName}</td>
+                                    <td>$${b.amount}</td>
+                                    <td>${b.date || 'N/A'}</td>
+                                    <td><span class="badge ${b.status==='paid'?'badge-success':'badge-danger'}">${b.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminPharmacy() {
+            const pharmacy = DB.getPharmacy();
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-pills"></i> Pharmacy Stock</h4>
+                    <button class="btn btn-primary btn-sm" onclick="addMedicine()"><i class="fas fa-plus"></i> Add Medicine</button>
+                    <div class="table-wrap mt-2">
+                        <table>
+                            <tr><th>Medicine</th><th>Stock</th><th>Price</th><th>Action</th></tr>
+                            ${pharmacy.map(m => `
+                                <tr>
+                                    <td>${m.name}</td>
+                                    <td>${m.stock}</td>
+                                    <td>$${m.price}</td>
+                                    <td><button class="btn btn-danger btn-sm" onclick="deleteMedicine(${m.id})"><i class="fas fa-trash"></i></button></td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminLab() {
+            const reports = DB.getLabReports();
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-flask"></i> Lab Reports</h4>
+                    <button class="btn btn-primary btn-sm" onclick="addLabReport()"><i class="fas fa-plus"></i> Add Report</button>
+                    <div class="table-wrap mt-2">
+                        <table>
+                            <tr><th>Patient</th><th>Test</th><th>Date</th><th>Status</th><th>Result</th></tr>
+                            ${reports.map(r => `
+                                <tr>
+                                    <td>${r.patientName}</td>
+                                    <td>${r.test}</td>
+                                    <td>${r.date}</td>
+                                    <td><span class="badge ${r.status==='Ready'?'badge-success':'badge-warning'}">${r.status}</span></td>
+                                    <td>${r.result || 'Pending'}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- DOCTOR HELPERS -----
+        function getDoctorPatients(user) {
+            const patients = DB.getUsers().filter(u => u.role === 'patient');
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-user-injured"></i> My Patients</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <tr><th>Name</th><th>Contact</th><th>Blood Group</th></tr>
+                            ${patients.map(p => `
+                                <tr><td>${p.name}</td><td>${p.contact || 'N/A'}</td><td>${p.bloodGroup || 'N/A'}</td></tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getDoctorAppointments(user) {
+            const appointments = DB.getAppointments().filter(a => a.doctorName.includes(user.name));
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-calendar-day"></i> My Appointments</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <tr><th>Patient</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr>
+                            ${appointments.map(a => `
+                                <tr>
+                                    <td>${a.patientName}</td>
+                                    <td>${a.date}</td>
+                                    <td>${a.time || 'N/A'}</td>
+                                    <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                    <td>
+                                        ${a.status === 'confirmed' ? `<button class="btn btn-primary btn-sm" onclick="completeTreatment(${a.id})"><i class="fas fa-check-double"></i> Complete</button>` : ''}
+                                        ${a.status === 'completed' ? `<span class="badge badge-info">Awaiting Payment</span>` : ''}
+                                        ${a.status === 'paid' ? `<span class="badge badge-success">Paid</span>` : ''}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- PATIENT HELPERS -----
+        function getPatientProfile(user) {
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-id-card"></i> My Profile</h4>
+                    <p><strong>Name:</strong> ${user.name}</p>
+                    <p><strong>Username:</strong> ${user.username}</p>
+                    <p><strong>Date of Birth:</strong> ${user.dob || 'N/A'}</p>
+                    <p><strong>Blood Group:</strong> ${user.bloodGroup || 'N/A'}</p>
+                    <p><strong>Contact:</strong> ${user.contact || 'N/A'}</p>
+                </div>
+            `;
+        }
+
+        function getPatientAppointments(user) {
+            const appointments = DB.getAppointments().filter(a => a.patientName === user.name);
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-calendar-check"></i> My Appointments</h4>
+                    <button class="btn btn-primary btn-sm" onclick="showPage('appointment')"><i class="fas fa-plus"></i> Book New</button>
+                    <div class="table-wrap mt-2">
+                        <table>
+                            <tr><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Payment</th><th>Action</th></tr>
+                            ${appointments.map(a => `
+                                <tr>
+                                    <td>${a.doctorName}</td>
+                                    <td>${a.date}</td>
+                                    <td>${a.time || 'N/A'}</td>
+                                    <td><span class="badge ${a.status==='confirmed'?'badge-success':a.status==='completed'?'badge-primary':a.status==='paid'?'badge-info':'badge-warning'}">${a.status}</span></td>
+                                    <td><span class="badge ${a.paymentStatus==='paid'?'badge-success':'badge-danger'}">${a.paymentStatus || 'unpaid'}</span></td>
+                                    <td>
+                                        ${a.status === 'completed' && a.paymentStatus !== 'paid' ? `<button class="btn btn-success btn-sm" onclick="payBill(${a.id})"><i class="fas fa-credit-card"></i> Pay $${a.fee}</button>` : ''}
+                                        ${a.status === 'paid' ? `<span class="badge badge-success">Paid</span>` : ''}
+                                        ${a.status === 'pending' ? `<span class="badge badge-warning">Waiting</span>` : ''}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPatientBilling(user) {
+            const bills = DB.getBills().filter(b => b.patientName === user.name);
+            const total = bills.filter(b => b.status === 'paid').reduce((sum, b) => sum + b.amount, 0);
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-file-invoice-dollar"></i> My Bills</h4>
+                    <div class="stat-card"><div class="number">$${total}</div><div class="label">Total Paid</div></div>
+                    <div class="table-wrap mt-2">
+                        <table>
+                            <tr><th>Date</th><th>Amount</th><th>Status</th></tr>
+                            ${bills.map(b => `
+                                <tr>
+                                    <td>${b.date || 'N/A'}</td>
+                                    <td>$${b.amount}</td>
+                                    <td><span class="badge ${b.status==='paid'?'badge-success':'badge-danger'}">${b.status}</span></td>
+                                </tr>
+                            `).join('')}
+                            ${bills.length === 0 ? '<tr><td colspan="3" class="text-muted">No bills available.</td></tr>' : ''}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPatientHistory(user) {
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-notes-medical"></i> Medical History</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <tr><th>Date</th><th>Visit</th><th>Diagnosis</th></tr>
+                            <tr><td>2026-06-10</td><td>Annual Checkup</td><td>Normal</td></tr>
+                            <tr><td>2026-05-15</td><td>Blood Pressure</td><td>Hypertension</td></tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPatientLabReports(user) {
+            const reports = DB.getLabReports().filter(r => r.patientName === user.name);
+            return `
+                <div class="card">
+                    <h4><i class="fas fa-flask"></i> My Lab Reports</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <tr><th>Test</th><th>Date</th><th>Status</th><th>Result</th></tr>
+                            ${reports.map(r => `
+                                <tr>
+                                    <td>${r.test}</td>
+                                    <td>${r.date}</td>
+                                    <td><span class="badge ${r.status==='Ready'?'badge-success':'badge-warning'}">${r.status}</span></td>
+                                    <td>${r.result || 'Pending'}</td>
+                                </tr>
+                            `).join('')}
+                            ${reports.length === 0 ? '<tr><td colspan="4" class="text-muted">No lab reports available.</td></tr>' : ''}
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- ADMIN UTILITY FUNCTIONS -----
+        function showAddDoctorModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal">
+                    <span class="close-modal" onclick="this.closest('.modal-overlay').remove()">&times;</span>
+                    <h3>Add New Doctor</h3>
+                    <form onsubmit="addDoctor(event)">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input class="form-control" id="docName" placeholder="Dr. John Doe" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Specialty</label>
+                            <input class="form-control" id="docSpecialty" placeholder="Cardiology" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Consultation Fee ($)</label>
+                            <input class="form-control" id="docFee" type="number" placeholder="100" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Username (for login)</label>
+                            <input class="form-control" id="docUsername" placeholder="dr.john" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input class="form-control" type="password" id="docPassword" placeholder="password" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fas fa-save"></i> Add Doctor</button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function addDoctor(e) {
+            e.preventDefault();
+            const name = document.getElementById('docName').value.trim();
+            const specialty = document.getElementById('docSpecialty').value.trim();
+            const fee = parseFloat(document.getElementById('docFee').value) || 100;
+            const username = document.getElementById('docUsername').value.trim();
+            const password = document.getElementById('docPassword').value.trim();
+
+            if (!name || !specialty || !username || !password) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            const users = DB.getUsers();
+            if (users.find(u => u.username === username)) {
+                alert('Username already exists!');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                username,
+                password,
+                role: 'doctor',
+                name,
+                specialty
+            };
+            users.push(newUser);
+            DB.setUsers(users);
+
+            const doctors = DB.getDoctors();
+            doctors.push({
+                id: newUser.id,
+                name,
+                specialty,
+                experience: 'New',
+                userId: newUser.id,
+                fee: fee
+            });
+            DB.setDoctors(doctors);
+
+            alert('Doctor added successfully!');
+            document.querySelector('.modal-overlay').remove();
+            renderAdminDashboard();
+            showDashboardSection('doctors');
+        }
+
+        function deleteDoctor(id) {
+            if (!confirm('Delete this doctor?')) return;
+            let doctors = DB.getDoctors();
+            doctors = doctors.filter(d => d.id !== id);
+            DB.setDoctors(doctors);
+            const users = DB.getUsers();
+            const filteredUsers = users.filter(u => u.id !== id);
+            DB.setUsers(filteredUsers);
+            renderAdminDashboard();
+            showDashboardSection('doctors');
+        }
+
+        function addMedicine() {
+            const name = prompt('Enter medicine name:');
+            if (!name) return;
+            const stock = parseInt(prompt('Enter stock quantity:'));
+            if (isNaN(stock)) return;
+            const price = parseFloat(prompt('Enter price:'));
+            if (isNaN(price)) return;
+            const pharmacy = DB.getPharmacy();
+            pharmacy.push({ id: Date.now(), name, stock, price });
+            DB.setPharmacy(pharmacy);
+            renderAdminDashboard();
+            showDashboardSection('pharmacy');
+        }
+
+        function deleteMedicine(id) {
+            if (!confirm('Delete this medicine?')) return;
+            let pharmacy = DB.getPharmacy();
+            pharmacy = pharmacy.filter(m => m.id !== id);
+            DB.setPharmacy(pharmacy);
+            renderAdminDashboard();
+            showDashboardSection('pharmacy');
+        }
+
+        function addLabReport() {
+            const patientName = prompt('Enter patient name:');
+            if (!patientName) return;
+            const test = prompt('Enter test name:');
+            if (!test) return;
+            const date = prompt('Enter date (YYYY-MM-DD):');
+            if (!date) return;
+            const reports = DB.getLabReports();
+            reports.push({
+                id: Date.now(),
+                patientName,
+                test,
+                date,
+                status: 'Pending',
+                result: ''
+            });
+            DB.setLabReports(reports);
+            renderAdminDashboard();
+            showDashboardSection('lab');
+        }
+
+        // ----- RENDER: LOGIN -----
+        function renderLogin() {
+            main.innerHTML = `
+                <div class="container mt-2" style="max-width:480px;">
+                    <div class="card">
+                        <h3><i class="fas fa-sign-in-alt" style="color:var(--primary);"></i> Login</h3>
+                        <form onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input class="form-control" id="loginUsername" placeholder="Enter username" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input class="form-control" id="loginPassword" type="password" placeholder="Enter password" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select class="form-control" id="loginRole">
+                                    <option value="admin">Admin</option>
+                                    <option value="doctor">Doctor</option>
+                                    <option value="patient">Patient</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fas fa-arrow-right"></i> Login</button>
+                            <p style="margin-top:0.8rem;text-align:center;">
+                                Don't have an account? <a onclick="showPage('register')" style="color:var(--primary);cursor:pointer;">Register here</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ----- RENDER: REGISTER -----
+        function renderRegister() {
+            main.innerHTML = `
+                <div class="container mt-2" style="max-width:480px;">
+                    <div class="card">
+                        <h3><i class="fas fa-user-plus" style="color:var(--primary);"></i> Register</h3>
+                        <form onsubmit="handleRegister(event)">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input class="form-control" id="regName" placeholder="Full name" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input class="form-control" id="regUsername" placeholder="Choose username" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input class="form-control" id="regPassword" type="password" placeholder="Password" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Register as</label>
+                                <select class="form-control" id="regRole">
+                                    <option value="patient">Patient</option>
+                                    <option value="doctor">Doctor</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <div id="adminFields" style="display:none;">
+                                <div class="form-group">
+                                    <label>Admin Registration Key</label>
+                                    <input class="form-control" id="regAdminKey" type="password" placeholder="Enter admin key" />
+                                    <small style="color:var(--text-light);">Contact system administrator for the key.</small>
+                                </div>
+                            </div>
+                            <div id="doctorFields" style="display:none;">
+                                <div class="form-group">
+                                    <label>Specialty</label>
+                                    <input class="form-control" id="regSpecialty" placeholder="e.g. Cardiology" />
+                                </div>
+                            </div>
+                            <div id="patientFields" style="display:block;">
+                                <div class="form-group">
+                                    <label>Date of Birth</label>
+                                    <input class="form-control" id="regDob" type="date" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Blood Group</label>
+                                    <input class="form-control" id="regBloodGroup" placeholder="A+, B-, etc." />
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact</label>
+                                    <input class="form-control" id="regContact" placeholder="Phone or email" />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success" style="width:100%;justify-content:center;"><i class="fas fa-user-plus"></i> Register</button>
+                            <p style="margin-top:0.8rem;text-align:center;">
+                                Already have an account? <a onclick="showPage('login')" style="color:var(--primary);cursor:pointer;">Login here</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('regRole').addEventListener('change', function() {
+                const adminFields = document.getElementById('adminFields');
+                const doctorFields = document.getElementById('doctorFields');
+                const patientFields = document.getElementById('patientFields');
+                adminFields.style.display = 'none';
+                doctorFields.style.display = 'none';
+                patientFields.style.display = 'none';
+                if (this.value === 'admin') adminFields.style.display = 'block';
+                else if (this.value === 'doctor') doctorFields.style.display = 'block';
+                else patientFields.style.display = 'block';
+            });
+        }
+
+        // ----- INIT -----
+        seedData();
+        renderPage();
+
+        // Make functions global
+        window.showPage = showPage;
+        window.showDashboardSection = showDashboardSection;
+        window.handleLogin = handleLogin;
+        window.handleRegister = handleRegister;
+        window.logout = logout;
+        window.bookAppointment = bookAppointment;
+        window.confirmAppointment = confirmAppointment;
+        window.completeTreatment = completeTreatment;
+        window.payBill = payBill;
+        window.showAddDoctorModal = showAddDoctorModal;
+        window.addDoctor = addDoctor;
+        window.deleteDoctor = deleteDoctor;
+        window.addMedicine = addMedicine;
+        window.deleteMedicine = deleteMedicine;
+        window.addLabReport = addLabReport;
+    </script>
+</body>
+</html>
